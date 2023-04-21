@@ -1,4 +1,5 @@
 //> using scala "2.12.17", "2.13.10", "3.2.2"
+//> using jvm "8"
 
 package coursier.cputil
 
