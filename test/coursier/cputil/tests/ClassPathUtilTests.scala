@@ -6,6 +6,7 @@ package coursier.cputil.tests
 
 import com.eed3si9n.expecty.Expecty.expect
 import coursier.cputil.ClassPathUtil
+
 import java.io.File
 
 class ClassPathUtilTests extends munit.FunSuite {
@@ -24,7 +25,7 @@ class ClassPathUtilTests extends munit.FunSuite {
     assert(input.nonEmpty)
     assert(files.nonEmpty)
 
-    val res = ClassPathUtil.classPath(input).map(os.Path(_, os.pwd))
+    val res = ClassPathUtil.classPath(input, _ => None).map(os.Path(_, os.pwd))
 
     expect(files == res)
   }
@@ -40,7 +41,7 @@ class ClassPathUtilTests extends munit.FunSuite {
       os.copy.into(f, tmpDir)
 
     val sep = File.separator
-    val res = ClassPathUtil.classPath(s"$tmpDir$sep*").map(os.Path(_, os.pwd))
+    val res = ClassPathUtil.classPath(s"$tmpDir$sep*", _ => None).map(os.Path(_, os.pwd))
 
     val expected = Seq(
       "compiler-interface-1.3.5.jar",
