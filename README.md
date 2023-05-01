@@ -1,7 +1,7 @@
 # class-path-util
 
 Utility library to parse class path inputs, and return the corresponding files. It
-handles simple blobs (`/dir/*`, `/dir/*.jar`) and Java properties (`${spark.home}/jars/*`).
+handles simple globs (`/dir/*`, `/dir/*.jar`) and Java properties (`${spark.home}/jars/*`).
 
 ## Usage
 
@@ -17,5 +17,5 @@ import coursier.cputil.ClassPathUtil
 
 Use it like
 ```scala
-ClassPathUtil.classPath("/foo/${thing}/*;/a/b.jar") // Seq[java.nio.file.Path]
+ClassPathUtil.classPath("/foo/${thing}/*:/a/b.jar") // Seq[java.nio.file.Path]
 ```
