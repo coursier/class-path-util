@@ -1,6 +1,6 @@
 //> using lib "org.scalameta::munit:0.7.29"
 //> using lib "com.eed3si9n.expecty::expecty:0.16.0"
-//> using lib "com.lihaoyi::os-lib:0.9.0"
+//> using lib "com.lihaoyi::os-lib:0.9.1"
 
 package coursier.cputil.tests
 
