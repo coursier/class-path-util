@@ -41,4 +41,6 @@ to the class path.
 
 The API of this library is minimal (one singleton with 2 methods).
 
-It intends to respect [semantic versioning](https://semver.org).
+It intends to respect [semantic versioning](https://semver.org), even
+with `0.x` versions (major version `0` subjected to the same
+constraints as `1`, `2`, etc.).
