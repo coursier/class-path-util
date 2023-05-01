@@ -11,6 +11,12 @@ import scala.collection.JavaConverters._
 
 object ClassPathUtil {
 
+  private implicit class CustomStringOps(private val str: String) extends AnyVal {
+    def endsWithIgnoreCase(suffix: String): Boolean =
+      str.length >= suffix.length &&
+        suffix.compareToIgnoreCase(str.substring(str.length - suffix.length)) == 0
+  }
+
   private val propertyRegex = Pattern.compile(
     Pattern.quote("${") + "[^" + Pattern.quote("{[()]}") + "]*" + Pattern.quote("}")
   )
@@ -41,23 +47,19 @@ object ClassPathUtil {
         Files.list(dir)
           .iterator
           .asScala
-          .filter { path =>
-            val name = path.toString
-            name.length >= ".jar".length &&
-            name.substring(name.length() - ".jar".length).equalsIgnoreCase(".jar")
-          }
+          .filter(_.toString.endsWithIgnoreCase(".jar"))
           .toVector
           .sortBy(_.getFileName)
-      if (processedElem.endsWith("/*")) {
-        val dir = Paths.get(processedElem.stripSuffix("/*"))
-        allJarsOf(dir)
+      val allJarsSuffixes = Seq("/", File.separator)
+        .distinct
+        .flatMap(sep => Seq("*", "*.jar").map(sep + _))
+      allJarsSuffixes.find(processedElem.endsWithIgnoreCase) match {
+        case Some(suffix) =>
+          val dir = Paths.get(processedElem.substring(0, processedElem.length - suffix.length))
+          allJarsOf(dir)
+        case None =>
+          Seq(Paths.get(processedElem))
       }
-      else if (processedElem.endsWith("/*.jar")) {
-        val dir = Paths.get(processedElem.stripSuffix("/*.jar"))
-        allJarsOf(dir)
-      }
-      else
-        Seq(Paths.get(processedElem))
     }
 
 }

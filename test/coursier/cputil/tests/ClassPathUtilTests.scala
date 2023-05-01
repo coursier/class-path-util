@@ -30,6 +30,8 @@ class ClassPathUtilTests extends munit.FunSuite {
     expect(files == res)
   }
 
+  val testGlobs = Seq("*", "*.jar", "*.Jar")
+
   test("star") {
     val initialCp = os.proc("cs", "fetch", "org.scala-lang:scala3-compiler_3:3.1.3")
       .call()
@@ -41,7 +43,6 @@ class ClassPathUtilTests extends munit.FunSuite {
       os.copy.into(f, tmpDir)
 
     val sep = File.separator
-    val res = ClassPathUtil.classPath(s"$tmpDir$sep*", _ => None).map(os.Path(_, os.pwd))
 
     val expected = Seq(
       "compiler-interface-1.3.5.jar",
@@ -59,7 +60,10 @@ class ClassPathUtilTests extends munit.FunSuite {
       "util-interface-1.3.0.jar"
     )
 
-    expect(res.map(_.last) == expected)
+    for (glob <- testGlobs) {
+      val res = ClassPathUtil.classPath(s"$tmpDir$sep$glob", _ => None).map(os.Path(_, os.pwd))
+      expect(res.map(_.last) == expected)
+    }
   }
 
   test("property") {
@@ -74,8 +78,6 @@ class ClassPathUtilTests extends munit.FunSuite {
 
     val sep   = File.separator
     val props = Map("test.tmp.dir" -> tmpDir.toString)
-    val res = ClassPathUtil.classPath(s"$${test.tmp.dir}$sep*", props.get)
-      .map(os.Path(_, os.pwd))
 
     val expected = Seq(
       "compiler-interface-1.3.5.jar",
@@ -93,7 +95,11 @@ class ClassPathUtilTests extends munit.FunSuite {
       "util-interface-1.3.0.jar"
     )
 
-    expect(res.map(_.last) == expected)
+    for (glob <- testGlobs) {
+      val res = ClassPathUtil.classPath(s"$${test.tmp.dir}$sep$glob", props.get)
+        .map(os.Path(_, os.pwd))
+      expect(res.map(_.last) == expected)
+    }
   }
 
 }
