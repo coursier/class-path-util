@@ -7,7 +7,7 @@ handles simple blobs (`/dir/*`, `/dir/*.jar`) and Java properties (`${spark.home
 
 Add it as a dependency:
 ```scala
-//> using lib "io.get-coursier::class-path-util:0.1.0"
+//> using lib "io.get-coursier::class-path-util:0.1.1"
 ```
 
 Import it:
