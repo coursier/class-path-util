@@ -36,3 +36,9 @@ returned by `java.io.File.pathSeparator`.
 and make class-path-util add all the JARs (files ending in `.jar`,
 comparison done in a case-insensitive way) of the underlying directory
 to the class path.
+
+## Version policy
+
+The API of this library is minimal (one singleton with 2 methods).
+
+It intends to respect [semantic versioning](https://semver.org).
