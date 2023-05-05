@@ -14,7 +14,7 @@ object ClassPathUtil {
   private implicit class CustomStringOps(private val str: String) extends AnyVal {
     def endsWithIgnoreCase(suffix: String): Boolean =
       str.length >= suffix.length &&
-        suffix.compareToIgnoreCase(str.substring(str.length - suffix.length)) == 0
+      suffix.compareToIgnoreCase(str.substring(str.length - suffix.length)) == 0
   }
 
   private val propertyRegex = Pattern.compile(
