@@ -44,12 +44,15 @@ object ClassPathUtil {
         value
       }
       def allJarsOf(dir: Path): Seq[Path] =
-        Files.list(dir)
-          .iterator
-          .asScala
-          .filter(_.toString.endsWithIgnoreCase(".jar"))
-          .toVector
-          .sortBy(_.getFileName)
+        if (Files.isDirectory(dir))
+          Files.list(dir)
+            .iterator
+            .asScala
+            .filter(_.toString.endsWithIgnoreCase(".jar"))
+            .toVector
+            .sortBy(_.getFileName)
+        else
+          Nil
       val allJarsSuffixes = Seq("/", File.separator)
         .distinct
         .flatMap(sep => Seq("*", "*.jar").map(sep + _))

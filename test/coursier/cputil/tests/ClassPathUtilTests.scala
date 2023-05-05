@@ -66,6 +66,18 @@ class ClassPathUtilTests extends munit.FunSuite {
     }
   }
 
+  test("star missing dir") {
+    val tmpDir = os.temp.dir(prefix = "class-path-util-tests")
+
+    val sep = File.separator
+
+    for (glob <- testGlobs) {
+      val res =
+        ClassPathUtil.classPath(s"${tmpDir / "foo"}$sep$glob", _ => None).map(os.Path(_, os.pwd))
+      expect(res.isEmpty)
+    }
+  }
+
   test("property") {
     val initialCp = os.proc("cs", "fetch", "org.scala-lang:scala3-compiler_3:3.1.3")
       .call()
