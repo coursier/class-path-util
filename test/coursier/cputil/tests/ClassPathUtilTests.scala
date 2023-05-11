@@ -114,4 +114,18 @@ class ClassPathUtilTests extends munit.FunSuite {
     }
   }
 
+  test("substitute properties before splitting") {
+    val initialCp = os.proc("cs", "fetch", "org.scala-lang:scala3-compiler_3:3.1.3")
+      .call()
+      .out.lines()
+      .filter(_.nonEmpty)
+      .map(os.Path(_, os.pwd))
+
+    val props = Map("test.cp" -> initialCp.map(_.toString).mkString(File.pathSeparator))
+
+    val res = ClassPathUtil.classPath("${test.cp}", props.get)
+      .map(os.Path(_, os.pwd))
+    expect(res == initialCp)
+  }
+
 }
